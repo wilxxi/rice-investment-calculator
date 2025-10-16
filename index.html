@@ -17,7 +17,7 @@
 
     .calculator-container {
       background: white;
-      width: 400px;
+      width: 420px;
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       padding: 30px;
@@ -27,12 +27,12 @@
     h1 {
       color: #2e7d32;
       font-size: 22px;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
     h2 {
       color: #388e3c;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-size: 18px;
     }
 
@@ -70,7 +70,14 @@
       margin-top: 20px;
       font-weight: bold;
       color: #1b5e20;
-      font-size: 18px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -93,14 +100,20 @@
     <div id="step2" style="display:none;">
       <label>Enter Your Investment Amount (<span id="selectedCurrencyLabel">₱</span>):</label>
       <input type="number" id="amount" placeholder="Enter amount">
-      <button onclick="calculate()">Calculate ROI</button>
+
+      <button onclick="calculate()">Calculate ROI Period</button>
+      <button onclick="calculateAfterROI()">Calculate After ROI (30%)</button>
+      <button style="background-color:#999;" onclick="resetCalculator()">🔁 Change Currency</button>
     </div>
 
     <div id="result"></div>
+    <div class="note">
+      *Note: Computations are sample forecasts and may vary based on actual business performance.
+    </div>
   </div>
 
   <script>
-    const rates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.68 }; // Example conversion rates
+    const rates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.68 }; // Example rates
     let selectedCurrency = "PHP";
 
     function nextStep() {
@@ -120,19 +133,49 @@
     function calculate() {
       const amount = parseFloat(document.getElementById("amount").value);
       if (isNaN(amount) || amount <= 0) {
-        alert("Please enter a valid amount.");
+        alert("Please enter a valid investment amount.");
         return;
       }
 
       const rate = rates[selectedCurrency];
       const converted = amount * rate;
-      const monthlyProfit = converted * 0.05; // Example 5% profit per month
+      const monthlyProfit = converted * 0.05; // 5% profit per month (sample)
+      const roiMonths = converted / monthlyProfit; // months to complete ROI
 
       document.getElementById("result").innerHTML = `
-        Estimated Monthly Profit: <br>
-        <strong>${monthlyProfit.toFixed(2)} ${selectedCurrency}</strong><br><br>
-        *Note: This is a sample forecast and may vary based on actual sales and performance.
+        <strong>Currency:</strong> ${selectedCurrency}<br>
+        <strong>Investment:</strong> ${converted.toFixed(2)} ${selectedCurrency}<br>
+        <strong>Estimated Monthly Profit:</strong> ${monthlyProfit.toFixed(2)} ${selectedCurrency}<br>
+        <strong>Estimated ROI Completion:</strong> ${roiMonths.toFixed(1)} months
       `;
+    }
+
+    function calculateAfterROI() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid investment amount.");
+        return;
+      }
+
+      const rate = rates[selectedCurrency];
+      const converted = amount * rate;
+      const monthlyProfit = converted * 0.05;
+      const roiMonths = converted / monthlyProfit;
+      const afterROIMonthly = monthlyProfit * 0.3; // 30% share after ROI
+
+      document.getElementById("result").innerHTML = `
+        <strong>Currency:</strong> ${selectedCurrency}<br>
+        <strong>Investment:</strong> ${converted.toFixed(2)} ${selectedCurrency}<br>
+        <strong>ROI Completion:</strong> ${roiMonths.toFixed(1)} months<br>
+        <strong>After ROI (30%) Monthly Profit:</strong> ${afterROIMonthly.toFixed(2)} ${selectedCurrency}
+      `;
+    }
+
+    function resetCalculator() {
+      document.getElementById("step1").style.display = "block";
+      document.getElementById("step2").style.display = "none";
+      document.getElementById("amount").value = "";
+      document.getElementById("result").innerHTML = "";
     }
   </script>
 </body>
