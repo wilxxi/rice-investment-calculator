@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sinuagan Harvest Rice Investment Calculator</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f9f5;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      width: 400px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 15px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2e7d32;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #43a047;
+    }
+
+    .result-box {
+      margin-top: 25px;
+      background-color: #f1fdf1;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #cde9cd;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #555;
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🌾 Sinuagan Harvest Rice Investment</h2>
+
+    <label>Choose Currency:</label>
+    <select id="currency">
+      <option value="PHP">PHP (₱)</option>
+      <option value="AUD">AUD ($)</option>
+      <option value="USD">USD ($)</option>
+      <option value="JPY">JPY (¥)</option>
+    </select>
+
+    <label>Enter Investment Amount:</label>
+    <input type="number" id="amount" placeholder="e.g. 47500">
+
+    <button onclick="calculateBeforeROI()">Calculate Before ROI (60%)</button>
+    <button onclick="calculateAfterROI()">Calculate After ROI (30%)</button>
+
+    <div id="result" class="result-box"></div>
+
+    <div class="note">
+      *Note: This is a sample computation and forecasted profit.  
+      Figures are subject to adjustment based on actual results.
+    </div>
+  </div>
+
+  <script>
+    const rates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.68 };
+    const baseNetProfitPHP = 5000; // base monthly net profit
+    const totalCapital = 190000; // total business capital
+
+    function calculateBeforeROI() {
+      const currency = document.getElementById("currency").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!amount || amount <= 0) {
+        document.getElementById("result").innerHTML = "Please enter a valid investment amount.";
+        return;
+      }
+
+      const rate = rates[currency];
+      const convertedProfit = baseNetProfitPHP * rate;
+
+      const investPercent = amount / totalCapital; // investor % of total capital
+      const investorSharePercent = investPercent * 0.6; // 60% pool before ROI
+      const investorMonthlyProfit = convertedProfit * investorSharePercent; 
+      const roiTarget = amount * rate;
+      const monthsToROI = roiTarget / investorMonthlyProfit;
+
+      document.getElementById("result").innerHTML = `
+        <h4>Before ROI (60%)</h4>
+        <p><b>Investment Share:</b> ${(investPercent * 100).toFixed(1)}% of total capital</p>
+        <p><b>Profit Share:</b> ${(investorSharePercent * 100).toFixed(1)}%</p>
+        <p><b>Monthly Investor Profit:</b> ${investorMonthlyProfit.toFixed(2)} ${currency}</p>
+        <p><b>Estimated ROI Completion:</b> ${monthsToROI.toFixed(1)} months</p>
+      `;
+    }
+
+    function calculateAfterROI() {
+      const currency = document.getElementById("currency").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!amount || amount <= 0) {
+        document.getElementById("result").innerHTML = "Please enter a valid investment amount.";
+        return;
+      }
+
+      const rate = rates[currency];
+      const convertedProfit = baseNetProfitPHP * rate;
+
+      const investPercent = amount / totalCapital;
+      const investorSharePercent = investPercent * 0.3; // 30% pool after ROI
+      const investorMonthlyProfit = convertedProfit * investorSharePercent;
+
+      document.getElementById("result").innerHTML = `
+        <h4>After ROI (30%)</h4>
+        <p><b>Investment Share:</b> ${(investPercent * 100).toFixed(1)}% of total capital</p>
+        <p><b>Lifetime Profit Share:</b> ${(investorSharePercent * 100).toFixed(1)}%</p>
+        <p><b>Monthly Investor Profit:</b> ${investorMonthlyProfit.toFixed(2)} ${currency}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
