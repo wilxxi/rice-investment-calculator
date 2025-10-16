@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rice Business Investment Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #faf9f6;
+      color: #333;
+      text-align: center;
+      padding: 40px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result-box {
+      margin-top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: inline-block;
+      min-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rice Business Investment Calculator</h1>
+  <p>Enter your investment amount in Philippine Pesos (₱):</p>
+
+  <input type="number" id="investment" placeholder="e.g. 50000">
+  <button onclick="calculateROI()">Calculate</button>
+
+  <div id="result" class="result-box"></div>
+
+  <script>
+    function calculateROI() {
+      const investment = parseFloat(document.getElementById("investment").value);
+      const totalCapital = 190000;
+      const monthlyProfit = 5000;
+      const exchangeRate = 40; // ₱40 = AUD 1
+
+      if (isNaN(investment) || investment <= 0) {
+        document.getElementById("result").innerHTML = "<b>Please enter a valid amount.</b>";
+        return;
+      }
+
+      const profitShare = (investment / totalCapital) * 60;
+      const monthlyReturn = monthlyProfit * (profitShare / 100);
+      const roiMonths = investment / monthlyReturn;
+
+      const resultText = `
+        <h3>Results</h3>
+        <p><b>Investment:</b> ₱${investment.toLocaleString()} (≈ AUD ${(investment / exchangeRate).toFixed(2)})</p>
+        <p><b>Profit Share:</b> ${profitShare.toFixed(2)}%</p>
+        <p><b>Estimated Monthly Return:</b> ₱${monthlyReturn.toFixed(2)} (≈ AUD ${(monthlyReturn / exchangeRate).toFixed(2)})</p>
+        <p><b>Estimated ROI Period:</b> ${roiMonths.toFixed(1)} months</p>
+      `;
+
+      document.getElementById("result").innerHTML = resultText;
+    }
+  </script>
+</body>
+</html>
