@@ -141,8 +141,6 @@
 
       const convertedProfit = baseNetProfitPHP * rates[currency];
       const investorShare = convertedProfit * roiPercent;
-      const roiTarget = amount * rates[currency];
-      const monthsToROI = roiTarget / investorShare;
 
       document.getElementById("result").innerHTML = `
         <h4>After ROI (30%)</h4>
