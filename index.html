@@ -81,7 +81,7 @@
 <body>
 
   <div class="container">
-    <h2>🌾 Golden Harvest Rice Investment</h2>
+    <h2>🌾 Sinuagan Harvest Rice Investment</h2>
 
     <label>Choose Currency:</label>
     <select id="currency">
@@ -124,7 +124,7 @@
 
       const investPercent = amount / totalCapital; // investor % of total capital
       const investorSharePercent = investPercent * 0.6; // 60% pool before ROI
-      const investorMonthlyProfit = convertedProfit * investorSharePercent / 1; 
+      const investorMonthlyProfit = convertedProfit * investorSharePercent; 
       const roiTarget = amount * rate;
       const monthsToROI = roiTarget / investorMonthlyProfit;
 
