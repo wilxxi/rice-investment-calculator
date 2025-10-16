@@ -3,44 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rice Investment Calculator</title>
+  <title>Rice Business Investment Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    select, input, button { margin: 10px 0; padding: 8px; }
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f9fafb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator-container {
+      background: white;
+      width: 400px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2e7d32;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #388e3c;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #333;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #1b5e20;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
-  <h2>Rice Business Investment Calculator</h2>
+  <div class="calculator-container">
+    <h1>🌾 Sinuagan Rice Retailing Store</h1>
+    <h2>Investment Profit Calculator</h2>
 
-  <label>Investment Amount:</label>
-  <input type="number" id="amount" placeholder="Enter amount">
+    <div id="step1">
+      <label>Select Your Currency:</label>
+      <select id="currency">
+        <option value="PHP">₱ Philippine Peso (PHP)</option>
+        <option value="AUD">$ Australian Dollar (AUD)</option>
+        <option value="USD">$ US Dollar (USD)</option>
+        <option value="JPY">¥ Japanese Yen (JPY)</option>
+      </select>
+      <button onclick="nextStep()">Next</button>
+    </div>
 
-  <br>
+    <div id="step2" style="display:none;">
+      <label>Enter Your Investment Amount (<span id="selectedCurrencyLabel">₱</span>):</label>
+      <input type="number" id="amount" placeholder="Enter amount">
+      <button onclick="calculate()">Calculate ROI</button>
+    </div>
 
-  <label>Choose Currency:</label>
-  <select id="currency">
-    <option value="PHP">PHP (₱)</option>
-    <option value="AUD">AUD ($)</option>
-    <option value="USD">USD ($)</option>
-    <option value="JPY">JPY (¥)</option>
-  </select>
-
-  <br>
-  <button onclick="calculate()">Calculate ROI</button>
-
-  <h3 id="result"></h3>
+    <div id="result"></div>
+  </div>
 
   <script>
-    const rates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.68 }; // Example rates
+    const rates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.68 }; // Example conversion rates
+    let selectedCurrency = "PHP";
+
+    function nextStep() {
+      selectedCurrency = document.getElementById("currency").value;
+      const label = {
+        PHP: "₱",
+        AUD: "$",
+        USD: "$",
+        JPY: "¥"
+      }[selectedCurrency];
+      
+      document.getElementById("selectedCurrencyLabel").innerText = label;
+      document.getElementById("step1").style.display = "none";
+      document.getElementById("step2").style.display = "block";
+    }
 
     function calculate() {
       const amount = parseFloat(document.getElementById("amount").value);
-      const currency = document.getElementById("currency").value;
-      const converted = amount * rates[currency];
-      const roi = converted * 0.05; // Example 5% profit
+      if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+      }
 
-      document.getElementById("result").innerHTML =
-        `Estimated Monthly Profit: ${roi.toFixed(2)} ${currency}`;
+      const rate = rates[selectedCurrency];
+      const converted = amount * rate;
+      const monthlyProfit = converted * 0.05; // Example 5% profit per month
+
+      document.getElementById("result").innerHTML = `
+        Estimated Monthly Profit: <br>
+        <strong>${monthlyProfit.toFixed(2)} ${selectedCurrency}</strong><br><br>
+        *Note: This is a sample forecast and may vary based on actual sales and performance.
+      `;
     }
   </script>
 </body>
