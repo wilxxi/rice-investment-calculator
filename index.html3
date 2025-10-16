@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sinuagan Harvest Rice Investment</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f8f5;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+  }
+  .container {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    max-width: 420px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    color: #4b6f44;
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    margin: 10px 0 5px;
+  }
+  input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  button {
+    background-color: #4b6f44;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  button:hover {
+    background-color: #3b5c38;
+  }
+  .result {
+    background: #f0f5f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  .result h3 {
+    margin: 0 0 8px;
+    color: #4b6f44;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sinuagan Harvest Rice Investment</h1>
+    
+    <label for="currency">Select Currency:</label>
+    <select id="currency">
+      <option value="PHP">PHP (₱)</option>
+      <option value="AUD">AUD ($)</option>
+      <option value="USD">USD ($)</option>
+      <option value="JPY">JPY (¥)</option>
+    </select>
+
+    <label for="capital">Enter Total Capital Amount:</label>
+    <input type="number" id="capital" placeholder="e.g., 190000" />
+
+    <label for="amount">Enter Your Investment Amount:</label>
+    <input type="number" id="amount" placeholder="e.g., 47500" />
+
+    <button onclick="calculateBeforeROI()">Calculate Before ROI (60%)</button>
+    <button onclick="calculateAfterROI()">Calculate After ROI (30%)</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+<script>
+function formatCurrency(value, currency) {
+  const symbols = { PHP: '₱', AUD: '$', USD: '$', JPY: '¥' };
+  return `${symbols[currency] || ''}${value.toLocaleString()}`;
+}
+
+function calculateBeforeROI() {
+  const amount = parseFloat(document.getElementById("amount").value);
+  const capital = parseFloat(document.getElementById("capital").value);
+  const currency = document.getElementById("currency").value;
+  const netMonthlyProfit = 5000; // PHP
+  const exchangeRates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.6 };
+  
+  if (isNaN(amount) || isNaN(capital) || capital <= 0) {
+    document.getElementById("result").innerHTML = "⚠️ Please enter valid capital and investment amounts.";
+    return;
+  }
+
+  const sharePercent = (amount / capital) * 60; 
+  const monthlyShare = netMonthlyProfit * (sharePercent / 100);
+  const roiCompletion = amount / monthlyShare;
+  const convertedMonthlyShare = monthlyShare * exchangeRates[currency];
+
+  document.getElementById("result").innerHTML = `
+    <h3>Before ROI (60%)</h3>
+    Investor Share: ${sharePercent.toFixed(2)}%<br>
+    Monthly Profit Share: ${formatCurrency(convertedMonthlyShare.toFixed(2), currency)}<br>
+    Estimated ROI Completion: ${roiCompletion.toFixed(1)} months
+  `;
+}
+
+function calculateAfterROI() {
+  const amount = parseFloat(document.getElementById("amount").value);
+  const capital = parseFloat(document.getElementById("capital").value);
+  const currency = document.getElementById("currency").value;
+  const netMonthlyProfit = 5000; // PHP
+  const exchangeRates = { PHP: 1, AUD: 0.027, USD: 0.017, JPY: 2.6 };
+
+  if (isNaN(amount) || isNaN(capital) || capital <= 0) {
+    document.getElementById("result").innerHTML = "⚠️ Please enter valid capital and investment amounts.";
+    return;
+  }
+
+  const sharePercent = (amount / capital) * 30;
+  const monthlyShare = netMonthlyProfit * (sharePercent / 100);
+  const convertedMonthlyShare = monthlyShare * exchangeRates[currency];
+
+  document.getElementById("result").innerHTML = `
+    <h3>After ROI (30%)</h3>
+    Lifetime Profit Share: ${sharePercent.toFixed(2)}%<br>
+    Monthly Profit Share: ${formatCurrency(convertedMonthlyShare.toFixed(2), currency)}
+  `;
+}
+</script>
+</body>
+</html>
